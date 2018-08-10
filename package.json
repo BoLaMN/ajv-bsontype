@@ -1,0 +1,18 @@
+{
+  "name": "ajv-bsontype",
+  "version": "1.0.0",
+  "description": "adds mongodb's bsonType validators",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "BoLaMN",
+    "url": "https://github.com/BoLaMN"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BoLaMN/ajv-bsontype"
+  },
+  "license": "MIT"
+}
