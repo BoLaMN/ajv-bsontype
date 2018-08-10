@@ -1,4 +1,4 @@
-export default function(ajv) {
+module.exports = function(ajv) {
 
   const type = function(v) {
     if (v === null) {
