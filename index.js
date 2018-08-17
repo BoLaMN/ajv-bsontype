@@ -41,13 +41,11 @@ module.exports = function(ajv) {
         case 6: case 'undefined':
           return [ 'null', 'undefined' ].includes(t);
         case 7: case 'objectId':
-          return ((t === 'string') && /^[0-9a-fA-F]{24}$/.test(a)) ||
-          ((t === 'object') && (a._bsontype === 'ObjectID'));
+          return (t === 'object') && (a._bsontype === 'ObjectID');
         case 8: case 'bool': case 'boolean':
           return t === 'boolean';
         case 9: case 'date':
-          return (t === 'date') ||
-          ((t === 'string') && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:.\d{1,3})?Z$/.test(a));
+          return t === 'date';
         case 10: case 'null':
           return t === 'null';
         case 11: case 'regex':
@@ -63,15 +61,40 @@ module.exports = function(ajv) {
     };
   };
 
-  ajv.addKeyword('bsonType', {
-    validate: (schema, data) => {
-      const validate = $type(data);
+  var validate = (schema, data) => {
+    if (validate.errors === null)
+      validate.errors = [];
 
-      if (Array.isArray(schema)) {
-        return schema.some(validate);
-      } else { return validate(schema); }
+    const v = $type(data);
+
+    let msg, passed;
+
+    if (Array.isArray(schema)) {
+      msg = schema.join(', ');
+      passed = schema.some(v);
+    } else {
+      msg = schema;
+      passed = v(schema);
     }
-  }
-  );
+
+    if (!passed) {
+
+      validate.errors.push({
+        keyword: 'bsonType',
+        params: {
+          bsonType: data
+        },
+        message: `should be ${msg}`
+      });
+    }
+
+    return passed;
+  };
+
+  ajv.addKeyword('bsonType', {
+    errors: true,
+    type: [ 'string', 'array' ],
+    validate
+  });
 
 };
