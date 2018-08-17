@@ -82,7 +82,7 @@ module.exports = function(ajv) {
       validate.errors.push({
         keyword: 'bsonType',
         params: {
-          bsonType: data
+          bsonType: schema
         },
         message: `should be ${msg}`
       });
