@@ -1,6 +1,6 @@
 {
   "name": "ajv-bsontype",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "adds mongodb's bsonType validators",
   "main": "index.js",
   "scripts": {

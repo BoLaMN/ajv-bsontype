@@ -93,7 +93,6 @@ module.exports = function(ajv) {
 
   ajv.addKeyword('bsonType', {
     errors: true,
-    type: [ 'string', 'array' ],
     validate
   });
 
