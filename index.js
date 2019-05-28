@@ -28,6 +28,8 @@ module.exports = function(ajv) {
   const $type = function(a) {
     const t = type(a);
 
+    const checkBsonType = b => (t === 'object') && (a._bsontype === b);
+
     return function(b) {
       switch (b) {
         case 1: case 'double':
@@ -41,7 +43,7 @@ module.exports = function(ajv) {
         case 6: case 'undefined':
           return [ 'null', 'undefined' ].includes(t);
         case 7: case 'objectId':
-          return (t === 'object') && (a._bsontype === 'ObjectID');
+          return checkBsonType('ObjectID');
         case 8: case 'bool': case 'boolean':
           return t === 'boolean';
         case 9: case 'date':
@@ -54,8 +56,8 @@ module.exports = function(ajv) {
           return (t === 'number') && (a <= 2147483647) && ((a + '').indexOf('.') === -1);
         case 18: case 'long':
           return (t === 'number') && (a > 2147483647) && (a <= 9223372036854775807) && ((a + '').indexOf('.') === -1);
-        case 19: case 'decimal': 
-          return (t === 'object') && (a._bsontype === 'Decimal128');
+        case 19: case 'decimal':
+          return checkBsonType('Decimal128');
         case 20: case 'number':
           return t === 'number';
         default: return false;
