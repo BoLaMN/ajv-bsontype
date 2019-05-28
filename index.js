@@ -54,7 +54,9 @@ module.exports = function(ajv) {
           return (t === 'number') && (a <= 2147483647) && ((a + '').indexOf('.') === -1);
         case 18: case 'long':
           return (t === 'number') && (a > 2147483647) && (a <= 9223372036854775807) && ((a + '').indexOf('.') === -1);
-        case 19: case 'decimal': case 'number':
+        case 19: case 'decimal': 
+          return (t === 'object') && (a._bsontype === 'Decimal128');
+        case 20: case 'number':
           return t === 'number';
         default: return false;
       }
