@@ -33,15 +33,17 @@ module.exports = function(ajv) {
     return function(b) {
       switch (b) {
         case 1: case 'double':
-          return (t === 'number') && ((a + '').indexOf('.') !== -1);
+          return checkBsonType('Double') && (a.valueOf() <= Number.MAX_SAFE_INTEGER);
         case 2: case 'string':
           return t === 'string';
         case 3: case 'object':
           return t === 'object';
         case 4: case 'array':
           return t === 'array';
-        case 6: case 'undefined':
-          return [ 'null', 'undefined' ].includes(t);
+        case 5: case 'binData':
+          return checkBsonType('Binary');
+        case 6: case 'undefined': // Deprecated
+          return false;
         case 7: case 'objectId':
           return checkBsonType('ObjectID');
         case 8: case 'bool': case 'boolean':
@@ -52,14 +54,26 @@ module.exports = function(ajv) {
           return t === 'null';
         case 11: case 'regex':
           return t === 'regex';
+        case 12: case 'dbPointer': // Deprecated
+          return false;
+        case 13: case 'javascript': // Not supported in Node driver
+          return false;
+        case 14: case 'symbol': // Deprecated
+          return false;
+        case 15: case 'javascriptWithScope': // Not supported in Node driver
+          return false;
         case 16: case 'int':
-          return (t === 'number') && (a <= 2147483647) && ((a + '').indexOf('.') === -1);
+          return checkBsonType('Int32') && (a.valueOf() <= 2147483647) && ((a.valueOf() + '').indexOf('.') === -1);
+        case 17: case 'timestamp':
+          return checkBsonType('Timestamp');
         case 18: case 'long':
-          return (t === 'number') && (a > 2147483647) && (a <= 9223372036854775807) && ((a + '').indexOf('.') === -1);
+          return checkBsonType('Long') && (a.toNumber() <= 9223372036854775807) && ((a.toNumber() + '').indexOf('.') === -1);
         case 19: case 'decimal':
           return checkBsonType('Decimal128');
-        case 20: case 'number':
-          return t === 'number';
+        case -1: case 'minKey':
+          return checkBsonType('MinKey');
+        case 127: case 'maxKey':
+          return checkBsonType('MaxKey');
         default: return false;
       }
     };
