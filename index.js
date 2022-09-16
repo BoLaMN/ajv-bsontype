@@ -53,9 +53,9 @@ module.exports = function(ajv) {
         case 11: case 'regex':
           return t === 'regex';
         case 16: case 'int':
-          return (t === 'number') && (a <= 2147483647) && ((a + '').indexOf('.') === -1);
+          return (t === 'number') && (a >= -2147483648) &&  (a <= 2147483647) && ((a + '').indexOf('.') === -1);
         case 18: case 'long':
-          return (t === 'number') && (a > 2147483647) && (a <= 9223372036854775807) && ((a + '').indexOf('.') === -1);
+          return (t === 'number') && (((a >= -9223372036854775808) && (a < -2147483648)) || ((a > 2147483647) && (a <= 9223372036854775807))) && ((a + '').indexOf('.') === -1);
         case 19: case 'decimal':
           return checkBsonType('Decimal128');
         case 20: case 'number':
