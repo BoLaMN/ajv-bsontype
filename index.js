@@ -43,7 +43,7 @@ module.exports = function(ajv) {
         case 6: case 'undefined':
           return [ 'null', 'undefined' ].includes(t);
         case 7: case 'objectId':
-          return checkBsonType('ObjectID');
+          return checkBsonType('ObjectId');
         case 8: case 'bool': case 'boolean':
           return t === 'boolean';
         case 9: case 'date':
